@@ -1,0 +1,8 @@
+﻿cmake_minimum_required(VERSION 3.10)
+project(RPiApp C CXX)
+include(cmake/arm-flags.cmake)
+add_subdirectory(external/libfoo libfoo-build)
+add_subdirectory(external/libbar libbar-build)
+add_executable(rpiapp src/main.cpp)
+target_include_directories(rpiapp PRIVATE external/libfoo/include external/libbar/include)
+target_link_libraries(rpiapp foo bar)
