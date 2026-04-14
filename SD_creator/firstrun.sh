@@ -66,7 +66,7 @@ pacman-key --populate archlinuxarm
 
 echo "=== system update ============"
 pacman -Syu --noconfirm
-pacman -S --noconfirm openssh htop avahi nss-mdns rsync
+pacman -S --noconfirm openssh htop avahi nss-mdns rsync gdb
 
 # 6. Hostname i /etc/hosts
 echo "=== HOSTNAME set ============="
