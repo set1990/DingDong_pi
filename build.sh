@@ -10,12 +10,14 @@ DEBUG=Release
 CLEAN=0
 TARGET=0
 ONLY=0
+RUN=0
 
 function usage() {
    echo "Options:"
    echo " -d|--debug : build with symbols"
    echo " -c|--clean : clean build result"
    echo " -t|--target : deploy on target"
+   echo " -r|--run : run gdb serwer"
    echo " -o|--only : without build"
    echo " -h|--help : displays this message"
    echo ""
@@ -39,6 +41,10 @@ while [[ $# -gt 0 ]]; do
          ;;
       -t|--target)
          TARGET=1
+         shift
+         ;;
+      -r|--run)
+         RUN=1
          shift
          ;;
       -o|--only)
@@ -70,6 +76,14 @@ if [[ $TARGET -eq 1 ]]; then
    echo "Deploying to $TARGET_RPI..."
    scp "$BUILD_DIR/rpiapp" "$TARGET_USER@$TARGET_RPI:$TARGET_PATH_APP/"
    scp "$BUILD_DIR/libbar-build/libbar.so" "$TARGET_USER@$TARGET_RPI:$TARGET_PATH_APP/"
+   scp "$BUILD_DIR/libwm8960-build/libwm8960.so" "$TARGET_USER@$TARGET_RPI:$TARGET_PATH_APP/"
+   scp "run_debug.sh" "$TARGET_USER@$TARGET_RPI:$TARGET_PATH_APP/"
    echo "Deployment finished"
-   #export LD_LIBRARY_PATH=/root
 fi
+
+if [[ $RUN -eq 1 ]]; then
+   echo "Run for debug on $TARGET_RPI..."
+   ssh $TARGET_USER@$TARGET_RPI "export LD_LIBRARY_PATH=/root && ./run_debug.sh"
+fi
+
+
